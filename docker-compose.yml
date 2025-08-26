@@ -1,0 +1,81 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - seguros-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  proposta-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: final
+    container_name: proposta-service
+    ports:
+      - "5001:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - RabbitMq__HostName=rabbitmq
+      - RabbitMq__Port=5672
+      - RabbitMq__UserName=guest
+      - RabbitMq__Password=guest
+      - RabbitMq__VirtualHost=/
+      - RabbitMq__ExchangeName=seguros.exchange
+      - RabbitMq__EventsQueueName=seguros.events
+      - RabbitMq__CommandsQueueName=seguros.commands
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - seguros-network
+    entrypoint: ["/app/start-proposta.sh"]
+    restart: unless-stopped
+
+  contratacao-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: final
+    container_name: contratacao-service
+    ports:
+      - "5002:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - RabbitMq__HostName=rabbitmq
+      - RabbitMq__Port=5672
+      - RabbitMq__UserName=guest
+      - RabbitMq__Password=guest
+      - RabbitMq__VirtualHost=/
+      - RabbitMq__ExchangeName=seguros.exchange
+      - RabbitMq__EventsQueueName=seguros.events
+      - RabbitMq__CommandsQueueName=seguros.commands
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - seguros-network
+    entrypoint: ["/app/start-contratacao.sh"]
+    restart: unless-stopped
+
+networks:
+  seguros-network:
+    driver: bridge
+
+volumes:
+  rabbitmq_data:

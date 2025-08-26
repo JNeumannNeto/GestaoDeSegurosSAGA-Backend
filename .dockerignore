@@ -1,0 +1,87 @@
+# Build artifacts
+**/bin
+**/obj
+**/out
+
+# IDE and editor files
+**/.vs
+**/.vscode
+**/.idea
+**/*.*proj.user
+**/*.suo
+**/*.user
+**/*.userosscache
+**/*.sln.docstates
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Docker
+**/Dockerfile*
+**/docker-compose*
+**/.dockerignore
+
+# Test results
+**/TestResults/
+**/*.trx
+**/*.coverage
+**/*.coveragexml
+
+# Logs
+**/logs
+**/*.log
+**/npm-debug.log*
+
+# Runtime data
+**/pids
+**/*.pid
+**/*.seed
+**/*.pid.lock
+
+# Dependency directories
+**/node_modules/
+
+# Optional npm cache directory
+**/.npm
+
+# Environment files
+**/.env
+**/.env.local
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
+
+# Temporary files
+**/tmp/
+**/temp/
+
+# Azure specific
+**/azds.yaml
+**/charts/
+**/secrets.dev.yaml
+**/values.dev.yaml
+
+# Database files
+**/*.dbmdl
+**/*.jfm
+
+# Other
+**/.project
+**/.settings
+**/.toolstarget
+**/.classpath
+**/.factorypath
+**/target
+LICENSE
+README*.md
