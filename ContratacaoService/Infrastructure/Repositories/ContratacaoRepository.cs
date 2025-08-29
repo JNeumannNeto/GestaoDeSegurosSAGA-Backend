@@ -58,4 +58,14 @@ public class ContratacaoRepository : IContratacaoRepository
         
         return Task.CompletedTask;
     }
+
+    public Task DeleteAsync(Guid id)
+    {
+        if (_contratacoes.TryRemove(id, out var contratacao))
+        {
+            _propostaToContratacaoMap.TryRemove(contratacao.PropostaId, out _);
+        }
+        
+        return Task.CompletedTask;
+    }
 }

@@ -9,4 +9,5 @@ public interface IContratacaoRepository
     Task<PagedResult<Contratacao>> GetAllAsync(PagedRequest request);
     Task<Contratacao?> GetByPropostaIdAsync(Guid propostaId);
     Task AddAsync(Contratacao contratacao);
+    Task DeleteAsync(Guid id);
 }

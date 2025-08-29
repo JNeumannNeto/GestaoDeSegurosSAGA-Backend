@@ -14,6 +14,7 @@
     <ProjectReference Include="..\Application\ContratacaoService.Application.csproj" />
     <ProjectReference Include="..\Infrastructure\ContratacaoService.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Shared\Shared.Messaging\Shared.Messaging.csproj" />
+    <ProjectReference Include="..\..\Shared\Shared.Saga\Shared.Saga.csproj" />
   </ItemGroup>
 
 </Project>

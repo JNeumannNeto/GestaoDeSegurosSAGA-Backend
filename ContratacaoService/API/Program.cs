@@ -1,5 +1,8 @@
 using ContratacaoService.API.Middleware;
 using ContratacaoService.Application.Handlers;
+using ContratacaoService.Application.Sagas.ContratarPropostaSaga;
+using ContratacaoService.Application.Sagas.ContratarPropostaSaga.Handlers;
+using ContratacaoService.Application.Sagas.ContratarPropostaSaga.Steps;
 using ContratacaoService.Application.Services;
 using ContratacaoService.Domain.Ports;
 using ContratacaoService.Infrastructure.Clients;
@@ -8,6 +11,7 @@ using ContratacaoService.Infrastructure.Services;
 using Shared.Messaging.Abstractions;
 using Shared.Messaging.Commands;
 using Shared.Messaging.Extensions;
+using Shared.Saga.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +42,23 @@ builder.Services.AddHttpClient<IPropostaServiceClient, PropostaServiceClient>(cl
 builder.Services.AddRabbitMqMessaging(builder.Configuration);
 builder.Services.AddRabbitMqConsumer(builder.Configuration);
 
-builder.Services.AddScoped<ICommandHandler<ContratarPropostaCommand>, ContratarPropostaCommandHandler>();
+// SAGA Infrastructure
+builder.Services.AddSaga();
+
+// SAGA Steps
+builder.Services.AddScoped<ValidarPropostaStep>();
+builder.Services.AddScoped<VerificarDisponibilidadeStep>();
+builder.Services.AddScoped<CriarContratacaoStep>();
+builder.Services.AddScoped<PublicarEventoStep>();
+
+// SAGA Implementation
+builder.Services.AddScoped<ContratarPropostaSaga>();
+
+// SAGA Handler
+builder.Services.AddScoped<ContratarPropostaSagaHandler>();
+
+// Command Handlers
+builder.Services.AddScoped<ICommandHandler<ContratarPropostaCommand>, ContratarPropostaSagaHandler>();
 
 builder.Services.AddScoped<Shared.Messaging.Abstractions.IEventHandler<Shared.Messaging.Events.PropostaStatusAlteradaEvent>, Shared.Messaging.Handlers.NotificacaoEventHandler>();
 builder.Services.AddScoped<Shared.Messaging.Abstractions.IEventHandler<Shared.Messaging.Events.ContratacaoProcessadaEvent>, Shared.Messaging.Handlers.NotificacaoEventHandler>();
