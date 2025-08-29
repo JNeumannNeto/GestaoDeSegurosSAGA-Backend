@@ -17,6 +17,7 @@ COPY ["PropostaService/Application/PropostaService.Application.csproj", "Propost
 COPY ["PropostaService/Domain/PropostaService.Domain.csproj", "PropostaService/Domain/"]
 COPY ["PropostaService/Infrastructure/PropostaService.Infrastructure.csproj", "PropostaService/Infrastructure/"]
 COPY ["Shared/Shared.Messaging/Shared.Messaging.csproj", "Shared/Shared.Messaging/"]
+COPY ["Shared/Shared.Saga/Shared.Saga.csproj", "Shared/Shared.Saga/"]
 
 # Restore packages
 RUN dotnet restore "ContratacaoService/API/ContratacaoService.API.csproj"
