@@ -24,7 +24,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: final
-    container_name: proposta-service
+    container_name: proposta-service-saga
     ports:
       - "5001:8080"
     environment:
@@ -51,7 +51,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: final
-    container_name: contratacao-service
+    container_name: contratacao-service-saga
     ports:
       - "5002:8080"
     environment:
