@@ -35,7 +35,10 @@ builder.Services.AddScoped<ContratacaoAppService>();
 
 builder.Services.AddHttpClient<IPropostaServiceClient, PropostaServiceClient>(client =>
 {
-    client.BaseAddress = new Uri("https://localhost:7001/");
+    var baseUrl = builder.Environment.IsProduction() 
+        ? "http://proposta-service-saga:8080/" 
+        : "https://localhost:7001/";
+    client.BaseAddress = new Uri(baseUrl);
     client.Timeout = TimeSpan.FromSeconds(30);
 });
 
@@ -71,9 +74,18 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+if (app.Environment.IsProduction())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
-app.UseHttpsRedirection();
+if (app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseCors("AllowFrontend");
 
